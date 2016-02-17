@@ -1,0 +1,15 @@
+package pkgLotta;
+
+/**
+ * Created by Sassu on 01/12/2015.
+ */
+public enum Stato {
+    DRITTO,
+    GANCIO,
+    GUARDIA_ALTA,
+    GUARDIA_BASSA,
+    JABBING,
+    LONTANO,
+    MONTANTE,
+    SCOPERTO;
+}

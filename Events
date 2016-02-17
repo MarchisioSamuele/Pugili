@@ -1,0 +1,59 @@
+package pkgLotta;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+/**
+ * Created by Sassu on 16/02/2016.
+ */
+class OpenActionListenerTable implements ActionListener {
+
+    private JTable tblData = null;
+
+    public OpenActionListenerTable(JTable tblData){
+        this.tblData = tblData;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFileChooser pnlOpen = new JFileChooser();
+        if (pnlOpen.showOpenDialog(null) == JFileChooser.CANCEL_OPTION)
+            return;
+        File file = pnlOpen.getSelectedFile();
+        try {
+            BufferedReader input = new BufferedReader(new FileReader(file));
+            MyTableModel model = (MyTableModel) tblData.getModel();
+            model.clean();
+
+            String line = input.readLine();
+            String[] fields = line.split(";");
+            model.addColumns(fields);
+
+            line = input.readLine();
+            while (line != null) {
+                fields = line.split(";");
+                model.addRow(fields);
+                line = input.readLine();
+            }
+        } catch (IOException el) {
+            MsgBox.alert("Error opening input file", "Error");
+        }
+
+        this.tblData.revalidate();
+    }
+
+}
+
+class OpenActionListenerPugile implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+}
+

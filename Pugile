@@ -1,0 +1,212 @@
+package pkgLotta;
+
+import pkgDado.Dado;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+
+/**
+ * rappresenta un combattente quasi invincibile
+ * @author Sassu on 01/12/2015
+ */
+class Pugile {
+    private int hp=0;
+    private String nome=null;
+    private int velocità=0;
+    private int forza=0;
+    private Stato mioStato=null;
+    private Dado dado=null;
+    private int[][] prob=null;
+    private static Stato[] stati=null;
+
+    /**
+     * costruttore
+     * inizializza la matrice dei cambiamenti di stato ed il vettore degli stati
+     */
+    public Pugile(){
+        try {
+            int i=0;
+            String line;
+            String[] cells;
+            this.nome = nome;
+            nome=nome+".txt";
+            BufferedReader br = new BufferedReader(new FileReader(nome));
+            this.mioStato= Stato.valueOf(br.readLine());
+            this.forza = Integer.parseInt(br.readLine());
+            this.hp = Integer.parseInt(br.readLine());
+            this.velocità = Integer.parseInt(br.readLine());
+            this.dado = new Dado(100);
+            this.prob=new int[8][8];
+            line=br.readLine();
+            while (line != null) {
+                cells=line.split(",");
+                for(int j=0;j<prob[i].length;j++){
+                    prob[i][j]=Integer.parseInt(cells[j]);
+                }i++;
+                line=br.readLine();
+            }br.close();
+            Pugile.stati = new Stato[]{Stato.GUARDIA_ALTA, Stato.GUARDIA_BASSA,
+                    Stato.LONTANO, Stato.SCOPERTO, Stato.JABBING, Stato.GANCIO,
+                    Stato.DRITTO, Stato.MONTANTE};
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * estratta una probabilità modifica lo stato del pugile in base alla matrice
+     * dei cambiamenti di stato
+     * @return stato
+     */
+    protected Stato cambiaStato() {
+        int perc,i,j,accumulo = 0;
+        j=0;
+        boolean esc = false;
+        perc = this.dado.lancia();
+        i= Arrays.asList(stati).indexOf(this.mioStato);
+        while(j<this.prob[i].length && !esc) {
+            accumulo += prob[i][j];
+            if(perc<accumulo){
+                esc=true;
+            }
+            j++;
+        }
+        this.mioStato = Pugile.stati[j-1];
+        return mioStato;
+    }
+
+    /**
+     * override di toString() della superclasse Object
+     * @return mioStato + hp:condizione e stato di salute
+     */
+    public String toString(){
+        return " Stato:" + this.mioStato + " hp:" +
+                this.hp +" velocità:"+this.velocità;
+    }
+
+    /**
+     * @return true se il pugile è KO,false altrimenti
+     */
+    public boolean isKO(){
+        return (this.hp<=0);
+    }
+
+    /**
+     * ricevuto un pugile richiama un metodo a seconda dello stato corrente
+     * @param pugile avversario
+     */
+    public void lotta(Pugile pugile){
+        int sforzo = 0;
+        switch(cambiaStato()){
+            case GUARDIA_ALTA:
+                break;
+            case GUARDIA_BASSA:
+                break;
+            case LONTANO:
+                break;
+            case SCOPERTO:
+                break;
+            case JABBING:jabbing(pugile);
+                sforzo = -5;
+                break;
+            case GANCIO:gancio(pugile);
+                sforzo = -6;
+                break;
+            case DRITTO:dritto(pugile);
+                sforzo = -5;
+                break;
+            case MONTANTE:montante(pugile);
+                sforzo = -8;
+                break;
+        }setVelocità(sforzo);
+    }
+
+    /**
+     * calcola il danno inflitto con un jabbing
+     * @param pugile
+     */
+    private void jabbing(Pugile pugile){
+        if(!pugile.getStato().equals(Stato.GUARDIA_BASSA) &&
+                !pugile.getStato().equals(Stato.LONTANO)){
+            pugile.setHp(this.forza/4);
+        }
+    }
+
+    /**
+     * calcola il danno inflitto con un gancio
+     * @param pugile
+     */
+    private void gancio(Pugile pugile){
+        if(!pugile.getStato().equals(Stato.GUARDIA_BASSA) &&
+                !pugile.getStato().equals(Stato.LONTANO)){
+            pugile.setHp(this.forza/3);
+        }
+    }
+
+    /**
+     * calcola il danno inflitto con un dritto
+     * @param pugile
+     */
+    private void dritto(Pugile pugile){
+        if(!pugile.getStato().equals(Stato.GUARDIA_ALTA) &&
+                !pugile.getStato().equals(Stato.LONTANO)){
+            pugile.setHp(this.forza/4);
+        }
+    }
+
+    /**
+     * calcola il danno inflitto con un montante
+     * @param pugile
+     */
+    private void montante(Pugile pugile){
+        if(!pugile.getStato().equals(Stato.GUARDIA_ALTA) &&
+                !pugile.getStato().equals(Stato.LONTANO)){
+            pugile.setHp(this.forza/2);
+        }
+    }
+
+    /**
+     * setta gli hp
+     * @param danno
+     */
+    public void setHp(int danno){
+        this.hp-=danno;
+    }
+
+    /**
+     * @return il nome
+     */
+    public String getNome(){
+        return this.nome;
+    }
+
+    /**
+     * @return lo stato
+     */
+    public Stato getStato(){
+        return this.mioStato;
+    }
+
+    /**
+     * setta la velocità
+     * @param slow
+     */
+    public void setVelocità(int slow){
+        this.velocità+=slow;
+    }
+
+    /**
+     * @return la velocità
+     */
+    public int getVelocità(){
+        return this.velocità;
+    }
+
+    /**
+     * @return gli hp
+     */
+    public int getHp(){
+        return this.hp;
+    }
+}

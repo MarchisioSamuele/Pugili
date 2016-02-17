@@ -1,0 +1,142 @@
+package pkgLotta;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Created by Sassu on 01/12/2015.
+ */
+
+class Ring extends JFrame {
+    public static void main(String[] args){
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Ring ring = new Ring();
+            }
+        });
+
+        /*
+        String nomeUno, nomeDue;
+        int i=0;
+
+        System.out.println("Immettere il nome del primo pugile");
+
+        System.out.println("Immettere il nome del secondo pugile");
+
+        Pugile boxerUno=new Pugile();
+        Pugile boxerDue=new Pugile();
+        System.out.println(boxerUno + "\t" + boxerDue);
+        while (!boxerUno.isKO() && !boxerDue.isKO()) {
+            if (boxerUno.getVelocità()>boxerDue.getVelocità()) {
+                boxerUno.lotta(boxerDue);
+                boxerDue.lotta(boxerUno);
+            }else{
+                boxerDue.lotta(boxerUno);
+                boxerUno.lotta(boxerDue);
+            }
+            i++;
+
+            System.out.println("-TURNO " + i + "-");      //"\t" tabula
+            System.out.println(boxerUno.getNome() + "\t" + "HP:" + boxerUno.getHp() + "\t" + "Velocità:" + boxerUno.getVelocità() + "\t" + boxerUno.getStato());
+            System.out.println(boxerDue.getNome() + "\t" + "HP:" + boxerDue.getHp() + "\t" + "Velocità:" + boxerDue.getVelocità() + "\t" + boxerDue.getStato());
+
+        } if (boxerUno.isKO() && boxerDue.isKO() == false)
+            System.out.println(boxerDue.getNome() + " WINS");
+        else if (boxerDue.isKO() && boxerUno.isKO() == false)
+            System.out.println(boxerUno.getNome() + " WINS");
+        else
+            System.out.println("TIE!");
+
+            */
+
+    }
+
+    private Ring() {
+        initUI();
+    }
+
+    private void initUI(){
+        setSize(450, 350);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setTitle("FIGHT!");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
+        /*
+        *   CREO I PANNELLI
+        */
+
+        JPanel pnlMain = new JPanel(new BorderLayout());
+        // 2 righe, 3 colonne, 2% orizzonatli, 2% verticali
+        JPanel pnlNorth = new JPanel(new GridLayout(0, 3, 2, 2));
+        //
+        JPanel pnlCenter = new JPanel(new FlowLayout());
+        // scroll panel
+        JScrollPane pnlSouth = new JScrollPane();
+
+
+        /*
+        *   NORTH
+        */
+
+        JButton btnPugile1 = new JButton("Pugile 1");
+        JButton btnPugile2 = new JButton("Pugile 2");
+        JButton btnFight = new JButton("FIGHT!");
+        JLabel lblPugile1 = new JLabel("Pugile Uno");
+        JLabel lblPugile2 = new JLabel("Pugile Due");
+        JLabel lblVs = new JLabel("vs");
+
+        // prima riga
+        pnlNorth.add(btnPugile1);
+        pnlNorth.add(btnFight);
+        pnlNorth.add(btnPugile2);
+
+        // seconda riga
+        pnlCenter.add(lblPugile1);
+        pnlCenter.add(lblVs);
+        pnlCenter.add(lblPugile2);
+
+
+        /*
+        *   CENTER
+        */
+
+        // prima colonna
+        MyTableModel model1 = new MyTableModel();
+        javax.swing.JTable tblPugile1 = new javax.swing.JTable();
+        tblPugile1.setModel(model1);
+
+        // seconda colonna
+        MyTableModel model2 = new MyTableModel();
+        javax.swing.JTable tblPugile2 = new javax.swing.JTable();
+        tblPugile2.setModel(model2);
+
+        // aggiungo gli elementi al panel
+        pnlCenter.add(tblPugile1);
+        pnlCenter.add(tblPugile2);
+
+
+        /*
+        *   SOUTH
+        */
+
+        JLabel lblLog = new JLabel("LOG");
+
+        pnlSouth.add(lblLog);
+
+
+        /*
+        *   MAIN
+        */
+
+        pnlMain.add(pnlNorth, BorderLayout.NORTH);
+        pnlMain.add(pnlCenter, BorderLayout.CENTER);
+        pnlMain.add(pnlSouth, BorderLayout.SOUTH);
+
+        this.add(pnlMain);
+
+    }
+}

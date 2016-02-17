@@ -1,0 +1,18 @@
+package pkgLotta;
+
+import javax.swing.*;
+
+/**
+ * Class for create MessageBox Errors
+ */
+
+class MsgBox {
+    public static void alert(String text,String title){
+        JOptionPane.showMessageDialog(null,text,title,JOptionPane.ERROR_MESSAGE);
+    }
+    public static int confirm(String text,String title){
+        return JOptionPane.showConfirmDialog(null,text,title,
+                JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
+    }
+}
+
